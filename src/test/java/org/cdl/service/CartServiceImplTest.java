@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -18,7 +20,7 @@ public class CartServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        cartService = Mockito.spy(new CartServiceImpl());
+        cartService = Mockito.spy(new CartServiceImpl(new HashMap<>()));
     }
 
     @Test

@@ -18,7 +18,7 @@ public class Main {
     private static Map<String, Product> productMap = new HashMap<>();
 
     public static void main(String[] args) {
-        CartService cartService = new CartServiceImpl();
+        CartService cartService = new CartServiceImpl(new HashMap<>());
 
         Scanner scanner = new Scanner(System.in);
         while (true) {

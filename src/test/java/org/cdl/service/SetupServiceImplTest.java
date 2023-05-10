@@ -1,6 +1,7 @@
 package org.cdl.service;
 
-import org.cdl.object.Product;
+import org.cdl.object.*;
+import org.cdl.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +30,9 @@ public class SetupServiceImplTest {
     @Test
     void addSchemeTest_single_item() {
         // method invocation
-        PriceScheme priceScheme = new PriceScheme();
         Product product = new Product(Product.Codes.A.getCode());
         product.setUnitPrice(50);
-        priceScheme.setProduct(product);
+        PriceScheme priceScheme = new PriceScheme(product);
         priceScheme.setQuantity(1);
         priceScheme.setPrice(50);
         setupService.addScheme(priceScheme);

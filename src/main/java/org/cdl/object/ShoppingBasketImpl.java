@@ -10,10 +10,11 @@ import java.util.Map;
 public class ShoppingBasketImpl implements ShoppingBasket {
     private String sessionId;
     private double totalPrice;
-    private Map<String, BookingItem> bookingItems = new HashMap<>();
+    private final Map<String, BookingItem> bookingItemMap;
 
-    public ShoppingBasketImpl(String sessionId) {
+    public ShoppingBasketImpl(String sessionId, Map<String, BookingItem> bookingItemMap) {
         this.sessionId = sessionId;
+        this.bookingItemMap = bookingItemMap;
     }
 
     @Override
@@ -26,11 +27,7 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         Product product = bookingItem.getProduct();
         String productCode = product.getCode();
         int quantity = bookingItem.getQuantity();
-        BookingItem currentItem = bookingItems.get(productCode);
-        if (currentItem == null) {
-            currentItem = new BookingItem(product);
-            bookingItems.put(productCode, currentItem);
-        }
+        BookingItem currentItem = bookingItemMap.computeIfAbsent(productCode, k -> new BookingItem(product));
         currentItem.addQuantity(quantity);
         recalculatePrice();
     }
@@ -39,7 +36,7 @@ public class ShoppingBasketImpl implements ShoppingBasket {
      * recalculate the price of the shopping basket
      */
     private void recalculatePrice() {
-        totalPrice = bookingItems.values()
+        totalPrice = bookingItemMap.values()
                 .stream()
                 .map(BookingItem::getPrice)
                 .reduce(0.0, Double::sum);
@@ -47,7 +44,7 @@ public class ShoppingBasketImpl implements ShoppingBasket {
 
     @Override
     public BookingItem getItem(String productCode) {
-        return bookingItems.get(productCode);
+        return bookingItemMap.get(productCode);
     }
 
     @Override
