@@ -1,6 +1,9 @@
 package org.cdl.service;
 
 import org.cdl.object.ShoppingBasket;
+import org.cdl.object.Product;
+import org.cdl.object.BookingItem;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,20 +45,19 @@ public class CartServiceImplTest {
     @Test
     void addItemTest() {
         // method invocation
-        Product product = new Product(Product.Codes.A);
+        Product product = new Product(Product.Codes.A.getCode());
         product.setUnitPrice(50);
         BookingItem bookingItem = new BookingItem(product);
-        bookingItem.addQuantity();
+        bookingItem.addQuantity(2);
 
         ShoppingBasket shoppingBasket = cartService.createShoppingBasket();
         shoppingBasket = cartService.addItem(shoppingBasket.getSessionId(), bookingItem);
-        shoppingBasket = cartService.addItem(shoppingBasket.getSessionId(), bookingItem);
 
         // assertions
-        BookingItem current = shoppingBasket.getItem(Products.Codes.A);
+        BookingItem current = shoppingBasket.getItem(Product.Codes.A.getCode());
         assertThat(current.getQuantity()).isEqualTo(2);
-        assertThat(current.getPrice()).isEquals(2 * 50);
-        assertThat(currentBasket.getTotalPrice()).isEqualTo(2 * 50);
+        assertThat(current.getPrice()).isEqualTo(2 * 50);
+        assertThat(shoppingBasket.getTotalPrice()).isEqualTo(2 * 50);
     }
 
 }
