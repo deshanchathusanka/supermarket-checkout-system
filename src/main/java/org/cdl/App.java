@@ -1,4 +1,4 @@
-package org.example;
+package org.cdl;
 
 /**
  * Hello world!
