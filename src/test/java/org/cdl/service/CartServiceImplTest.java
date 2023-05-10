@@ -1,5 +1,6 @@
 package org.cdl.service;
 
+import org.cdl.object.ShoppingBasket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
