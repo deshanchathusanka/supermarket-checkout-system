@@ -7,8 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +37,25 @@ public class CartServiceImplTest {
         // assertions
         assertThat(readShoppingBasket).isNotNull();
         assertThat(readShoppingBasket.getSessionId()).isEqualTo(shoppingBasket.getSessionId());
+    }
+
+    @Test
+    void addItemTest() {
+        // method invocation
+        Product product = new Product(Product.Codes.A);
+        product.setUnitPrice(50);
+        BookingItem bookingItem = new BookingItem(product);
+        bookingItem.addQuantity();
+
+        ShoppingBasket shoppingBasket = cartService.createShoppingBasket();
+        shoppingBasket = cartService.addItem(shoppingBasket.getSessionId(), bookingItem);
+        shoppingBasket = cartService.addItem(shoppingBasket.getSessionId(), bookingItem);
+
+        // assertions
+        BookingItem current = shoppingBasket.getItem(Products.Codes.A);
+        assertThat(current.getQuantity()).isEqualTo(2);
+        assertThat(current.getPrice()).isEquals(2 * 50);
+        assertThat(currentBasket.getTotalPrice()).isEqualTo(2 * 50);
     }
 
 }
