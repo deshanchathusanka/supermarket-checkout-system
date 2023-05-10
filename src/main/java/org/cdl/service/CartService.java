@@ -15,4 +15,12 @@ public interface CartService {
      * @return shopping basket {@link ShoppingBasketImpl}
      */
     ShoppingBasket createShoppingBasket();
+
+    /**
+     * read existing shopping basket
+     *
+     * @param sessionId
+     * @return shopping basket {@link ShoppingBasket}
+     */
+    ShoppingBasket readShoppingBasket(String sessionId);
 }

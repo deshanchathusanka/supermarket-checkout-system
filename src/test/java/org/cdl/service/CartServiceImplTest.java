@@ -33,7 +33,7 @@ public class CartServiceImplTest {
     @Test
     void readShoppingBasketTest() {
         // method invocation
-        ShoppingBasket shoppingBasket = cartService.createShoppingBasket()
+        ShoppingBasket shoppingBasket = cartService.createShoppingBasket();
         ShoppingBasket readShoppingBasket = cartService.readShoppingBasket(shoppingBasket.getSessionId());
 
         // assertions

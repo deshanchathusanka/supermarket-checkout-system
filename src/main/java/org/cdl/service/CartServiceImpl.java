@@ -21,4 +21,10 @@ public class CartServiceImpl implements CartService {
         basketMap.put(sessionId, shoppingBasket);
         return shoppingBasket;
     }
+
+    @Override
+    public ShoppingBasket readShoppingBasket(String sessionId) {
+        ShoppingBasket shoppingBasket = basketMap.get(sessionId);
+        return shoppingBasket;
+    }
 }
