@@ -38,8 +38,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ShoppingBasket readShoppingBasket(String sessionId) {
-        ShoppingBasket shoppingBasket = basketMap.get(sessionId);
-        return shoppingBasket;
+        return basketMap.get(sessionId);
     }
 
     @Override

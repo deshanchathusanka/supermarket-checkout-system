@@ -44,7 +44,11 @@ class ShoppingBasketImplTest {
         PriceScheme priceScheme2 = new PriceScheme(productA);
         priceScheme2.setQuantity(3);
         priceScheme2.setPrice(130);
-        doReturn(List.of(priceScheme2, priceScheme1))
+        // scheme 3 : multiple quantity price scheme
+        PriceScheme priceScheme3 = new PriceScheme(productA);
+        priceScheme3.setQuantity(10);
+        priceScheme3.setPrice(400);
+        doReturn(List.of(priceScheme3, priceScheme2, priceScheme1))
                 .when(setupService)
                 .readSchemes(Product.Codes.A.getCode());
     }
@@ -70,7 +74,10 @@ class ShoppingBasketImplTest {
     @CsvSource(value = {"A:2:100:100",
             "B:1:30:130",
             "A:1:130:160",
-            "B:1:45:175"}, delimiter = ':')
+            "B:1:45:175",
+            "A:3:260:305",
+            "B:1:75:335",
+            "A:4:400:475"}, delimiter = ':')
     void addItemTest(String productCode, int quantity, double totalItemPrice, double totalBasketPrice) {
         // method invocation
         Product product = new Product(productCode);
