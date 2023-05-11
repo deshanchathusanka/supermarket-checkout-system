@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.cdl.util.Constant.*;
+
 /**
  * Main class
  *
@@ -21,7 +23,6 @@ import java.util.Scanner;
  * @since 1.0
  */
 public class Main {
-
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
@@ -36,35 +37,41 @@ public class Main {
             if ("q".equals(start)) {
                 break;
             }
-            /* ################### setup new Item ################## */
+            /* ################### (1) setup new Item ################## */
             setupItem(setupService, scanner);
 
-            /* #################### setup new price rule ##################### */
+            /* #################### (2) setup new price rule ##################### */
             setupPriceRule(setupService, scanner);
 
-            /* ##################### checkout items ######################## */
+            /* ##################### (3) checkout items ######################## */
             checkout(cartService, setupService, scanner);
         }
 
     }
 
+    /**
+     * setup items
+     *
+     * @param setupService {@link SetupService}
+     * @param scanner      {@link Scanner}
+     */
     private static void setupItem(SetupService setupService, Scanner scanner) {
         logger.info("################ SETUP ITEM #####################");
 
         logger.info("Do you need to setup a new product(Y/N)?: ");
         String isSetupProduct = scanner.nextLine();
         /* validate answer */
-        while (!List.of("Y", "N").contains(isSetupProduct)) {
+        while (!List.of(YES, NO).contains(isSetupProduct)) {
             logger.info("Please ENTER a valid input(Y/N): Do you need to setup a new product(Y/N)?");
             isSetupProduct = scanner.nextLine();
         }
 
-        while ("Y".equals(isSetupProduct)) {
+        while (YES.equals(isSetupProduct)) {
             /* **************** (1) product code ******************** */
             logger.info("Enter the product code(A,B, C,...): ");
             String productCode = scanner.nextLine();
             /* validate input */
-            while (!productCode.matches("[A-Z]")) {
+            while (!productCode.matches(PRODUCT_CODE_REGEX)) {
                 logger.info("Please ENTER a valid product code(Uppercase Letter): ");
                 productCode = scanner.nextLine();
             }
@@ -72,17 +79,7 @@ public class Main {
             /* **************** (2) unit price ******************** */
             logger.info("Enter the unit price(Ex: 50P, £2.50/ Default is £): ");
             String unitPriceStr = scanner.nextLine();
-            double unitPrice;
-            /* validate input */
-            if (unitPriceStr.startsWith("£")) {
-                unitPriceStr = unitPriceStr.substring(1);
-                unitPrice = Double.parseDouble(unitPriceStr);
-            } else if (unitPriceStr.endsWith("P")) {
-                unitPriceStr = unitPriceStr.substring(0, unitPriceStr.length() - 1);
-                unitPrice = Double.parseDouble(unitPriceStr) / 100;
-            } else {
-                unitPrice = Double.parseDouble(unitPriceStr);
-            }
+            double unitPrice = preprocessPrice(unitPriceStr);
             Product product = new Product(productCode);
             product.setUnitPrice(unitPrice);
             PriceScheme priceScheme = new PriceScheme(product);
@@ -93,20 +90,26 @@ public class Main {
             logger.info("Do you need to setup a new product(Y/N)?: ");
             isSetupProduct = scanner.nextLine();
             /* validate answer */
-            while (!List.of("Y", "N").contains(isSetupProduct)) {
+            while (!List.of(YES, NO).contains(isSetupProduct)) {
                 logger.info("Please ENTER a valid input(Y/N): Do you need to setup a new product(Y/N)?");
                 isSetupProduct = scanner.nextLine();
             }
         }
     }
 
+    /**
+     * setup discount price rule
+     *
+     * @param setupService {@link SetupService}
+     * @param scanner      {@link Scanner}
+     */
     private static void setupPriceRule(SetupService setupService, Scanner scanner) {
         logger.info("################ SETUP RULE #####################");
 
         logger.info("Do you need to setup a new price schemes(Y/N)? ");
         String isSetupScheme = scanner.nextLine();
         /* validate answer */
-        while (!List.of("Y", "N").contains(isSetupScheme)) {
+        while (!List.of(YES, NO).contains(isSetupScheme)) {
             logger.info("Please ENTER a valid input(Y/N): Do you need to setup a new price schemes(Y/N)?");
             isSetupScheme = scanner.nextLine();
         }
@@ -117,7 +120,7 @@ public class Main {
             logger.info("Enter the product code(A,B, C,...): ");
             String productCode = scanner.nextLine();
             /* validate input */
-            while (!productCode.matches("[A-Z]")) {
+            while (!productCode.matches(PRODUCT_CODE_REGEX)) {
                 logger.info("Please ENTER a valid product code(Uppercase Letter): ");
                 productCode = scanner.nextLine();
             }
@@ -132,30 +135,27 @@ public class Main {
             /* **************** (3) special price ******************** */
             logger.info("Enter the special price(Ex: 50P, £2.50/ Default is £): ");
             String priceStr = scanner.nextLine();
-            double price;
-            /* validate input */
-            if (priceStr.startsWith("£")) {
-                priceStr = priceStr.substring(1);
-                price = Double.parseDouble(priceStr);
-            } else if (priceStr.endsWith("P")) {
-                priceStr = priceStr.substring(0, priceStr.length() - 1);
-                price = Double.parseDouble(priceStr) / 100;
-            } else {
-                price = Double.parseDouble(priceStr);
-            }
+            double price = preprocessPrice(priceStr);
             priceScheme.setPrice(price);
             setupService.addScheme(priceScheme);
 
             logger.info("Do you need to setup a new price schemes(Y/N): ");
             isSetupScheme = scanner.nextLine();
             /* validate answer */
-            while (!List.of("Y", "N").contains(isSetupScheme)) {
+            while (!List.of(YES, NO).contains(isSetupScheme)) {
                 logger.info("Please ENTER a valid input(Y/N): Do you need to setup a new price schemes(Y/N)?");
                 isSetupScheme = scanner.nextLine();
             }
         }
     }
 
+    /**
+     * checkout items
+     *
+     * @param cartService  {@link CartService}
+     * @param setupService {@link SetupService}
+     * @param scanner      {@link Scanner}
+     */
     private static void checkout(CartService cartService, SetupService setupService, Scanner scanner) {
         logger.info("################ SCAN ITEMS #####################");
 
@@ -165,11 +165,11 @@ public class Main {
         logger.info("Enter the product code of the item(Enter END to complete the transaction): ");
         String itemCode = scanner.nextLine();
         /* validate input */
-        while (!itemCode.matches("[A-Z]")) {
+        while (!itemCode.matches(PRODUCT_CODE_REGEX)) {
             logger.info("Please ENTER a valid product code(Uppercase Letter): ");
             itemCode = scanner.nextLine();
         }
-        while (!"END".equals(itemCode)) {
+        while (!END.equals(itemCode)) {
             Product product = setupService.readSchemes(itemCode).get(0).getProduct();
             BookingItem bookingItem = new BookingItem(product);
             bookingItem.addQuantity(1);
@@ -180,7 +180,7 @@ public class Main {
             logger.info("Enter the product code of the item(Enter END to complete the transaction): ");
             itemCode = scanner.nextLine();
             /* validate input */
-            while (!itemCode.matches("[A-Z]") && !"END".equals(itemCode)) {
+            while (!itemCode.matches(PRODUCT_CODE_REGEX) && !END.equals(itemCode)) {
                 logger.info("Please ENTER a valid product code(Uppercase Letter): ");
                 itemCode = scanner.nextLine();
             }
@@ -190,6 +190,27 @@ public class Main {
         logger.info("################ PAYMENT #####################");
         logger.info(String.format("The Total Amount To Pay: %s", shoppingBasket.getTotalPrice()));
         logger.info("############# THANK YOU ################\n\n");
+    }
+
+    /**
+     * preprocess input price to remove symbols and convert to double
+     *
+     * @param priceStr String price
+     * @return double price
+     */
+    private static double preprocessPrice(String priceStr) {
+        double price;
+        /* validate input */
+        if (priceStr.startsWith(POUND)) {
+            priceStr = priceStr.substring(1);
+            price = Double.parseDouble(priceStr);
+        } else if (priceStr.endsWith(PENCE)) {
+            priceStr = priceStr.substring(0, priceStr.length() - 1);
+            price = Double.parseDouble(priceStr) / 100;
+        } else {
+            price = Double.parseDouble(priceStr);
+        }
+        return price;
     }
 
 }

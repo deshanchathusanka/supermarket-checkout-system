@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * Implementation of Cart Service
+ *
  * @author deshan
  * @since 1.0
  */
@@ -22,6 +24,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * This constructor is used only for testing purposes
+     *
      * @param basketMap
      */
     CartServiceImpl(Map<String, ShoppingBasket> basketMap) {

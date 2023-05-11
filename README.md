@@ -47,3 +47,4 @@ Further improvements
 -
 - Implement REST API with spring boot to create a self-executable web application.
 - Integrate SQL database to store setup rules and persist shopping basket.
+- Implement session persistancy mechanism using memento design pattern

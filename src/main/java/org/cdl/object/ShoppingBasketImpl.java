@@ -4,9 +4,12 @@ import org.cdl.service.SetupService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
+ * Implementation of Shopping Basket
+ *
  * @author deshan
  * @since 1.0
  */
@@ -65,4 +68,26 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         return totalPrice;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingBasketImpl that = (ShoppingBasketImpl) o;
+        return Double.compare(that.totalPrice, totalPrice) == 0 && Objects.equals(sessionId, that.sessionId) && Objects.equals(bookingItemMap, that.bookingItemMap) && Objects.equals(setupService, that.setupService);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sessionId, totalPrice, bookingItemMap, setupService);
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingBasketImpl{" +
+                "sessionId='" + sessionId + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", bookingItemMap=" + bookingItemMap +
+                ", setupService=" + setupService +
+                '}';
+    }
 }

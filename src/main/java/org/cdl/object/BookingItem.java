@@ -1,8 +1,11 @@
 package org.cdl.object;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
+ * Booking Item Class
+ *
  * @author deshan
  * @since 1.0
  */
@@ -59,5 +62,28 @@ public class BookingItem {
 
     public void setPriceSchemes(List<PriceScheme> priceSchemes) {
         this.priceSchemes = priceSchemes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookingItem that = (BookingItem) o;
+        return quantity == that.quantity && Double.compare(that.price, price) == 0 && Objects.equals(product, that.product) && Objects.equals(priceSchemes, that.priceSchemes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(product, quantity, price, priceSchemes);
+    }
+
+    @Override
+    public String toString() {
+        return "BookingItem{" +
+                "product=" + product +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", priceSchemes=" + priceSchemes +
+                '}';
     }
 }

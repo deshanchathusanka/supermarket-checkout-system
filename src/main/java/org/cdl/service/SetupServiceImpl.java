@@ -6,6 +6,12 @@ import org.cdl.object.Product;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of Setup Service
+ *
+ * @author deshan
+ * @since 1.0
+ */
 public class SetupServiceImpl implements SetupService {
 
     // TODO : Need to implement cache to keep price schemes
@@ -16,6 +22,7 @@ public class SetupServiceImpl implements SetupService {
 
     /**
      * This constructor is only used for testing purposes
+     *
      * @param schemeMap
      */
     public SetupServiceImpl(Map<String, List<PriceScheme>> schemeMap) {
