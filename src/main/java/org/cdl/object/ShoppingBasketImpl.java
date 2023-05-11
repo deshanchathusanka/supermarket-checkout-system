@@ -1,7 +1,10 @@
 package org.cdl.object;
 
-import java.util.HashMap;
+import org.cdl.service.SetupService;
+
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author deshan
@@ -12,9 +15,12 @@ public class ShoppingBasketImpl implements ShoppingBasket {
     private double totalPrice;
     private final Map<String, BookingItem> bookingItemMap;
 
-    public ShoppingBasketImpl(String sessionId, Map<String, BookingItem> bookingItemMap) {
+    private final SetupService setupService;
+
+    public ShoppingBasketImpl(String sessionId, Map<String, BookingItem> bookingItemMap, SetupService setupService) {
         this.sessionId = sessionId;
         this.bookingItemMap = bookingItemMap;
+        this.setupService = setupService;
     }
 
     @Override
@@ -27,8 +33,15 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         Product product = bookingItem.getProduct();
         String productCode = product.getCode();
         int quantity = bookingItem.getQuantity();
-        BookingItem currentItem = bookingItemMap.computeIfAbsent(productCode, k -> new BookingItem(product));
+        List<PriceScheme> priceSchemes = setupService.readSchemes(productCode);
+        Function<String, BookingItem> mapFunction = key -> {
+            BookingItem item = new BookingItem(product);
+            item.setPriceSchemes(priceSchemes);
+            return item;
+        };
+        BookingItem currentItem = bookingItemMap.computeIfAbsent(productCode, mapFunction);
         currentItem.addQuantity(quantity);
+        currentItem.recalculatePrice();
         recalculatePrice();
     }
 

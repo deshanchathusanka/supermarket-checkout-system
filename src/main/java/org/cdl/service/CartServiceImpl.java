@@ -22,7 +22,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public ShoppingBasket createShoppingBasket() {
         String sessionId = UUID.randomUUID().toString();
-        ShoppingBasket shoppingBasket = new ShoppingBasketImpl(sessionId, new HashMap<>());
+        ShoppingBasket shoppingBasket = new ShoppingBasketImpl(sessionId, new HashMap<>(), new SetupServiceImpl(new HashMap<>()));
         basketMap.put(sessionId, shoppingBasket);
         return shoppingBasket;
     }

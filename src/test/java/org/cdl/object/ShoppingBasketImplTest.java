@@ -32,10 +32,13 @@ class ShoppingBasketImplTest {
         // mock
         Product product = new Product(Product.Codes.B.getCode());
         product.setUnitPrice(30);
-        PriceScheme priceScheme = new PriceScheme(product);
-        priceScheme.setQuantity(2);
-        priceScheme.setPrice(45);
-        doReturn(List.of(priceScheme))
+        PriceScheme priceScheme1 = new PriceScheme(product);
+        priceScheme1.setQuantity(1);
+        priceScheme1.setPrice(30);
+        PriceScheme priceScheme2 = new PriceScheme(product);
+        priceScheme2.setQuantity(2);
+        priceScheme2.setPrice(45);
+        doReturn(List.of(priceScheme2, priceScheme1))
                 .when(setupService)
                 .readSchemes(Product.Codes.B.getCode());
 
