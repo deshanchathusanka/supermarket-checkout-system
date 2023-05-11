@@ -29,7 +29,7 @@ public class BookingItem {
     /**
      * recalculate price based on unit price and discount price schemes
      */
-    public void recalculatePrice() {
+    public void recalculateItemPrice() {
         int tempPrice = 0;
         int balanceQuantity = quantity;
         for (PriceScheme scheme : priceSchemes) {

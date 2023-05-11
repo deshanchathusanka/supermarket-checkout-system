@@ -11,10 +11,9 @@ import java.util.function.Function;
  * @since 1.0
  */
 public class ShoppingBasketImpl implements ShoppingBasket {
-    private String sessionId;
+    private final String sessionId;
     private double totalPrice;
     private final Map<String, BookingItem> bookingItemMap;
-
     private final SetupService setupService;
 
     public ShoppingBasketImpl(String sessionId, Map<String, BookingItem> bookingItemMap, SetupService setupService) {
@@ -34,6 +33,7 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         String productCode = product.getCode();
         int quantity = bookingItem.getQuantity();
         List<PriceScheme> priceSchemes = setupService.readSchemes(productCode);
+
         Function<String, BookingItem> mapFunction = key -> {
             BookingItem item = new BookingItem(product);
             item.setPriceSchemes(priceSchemes);
@@ -41,14 +41,14 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         };
         BookingItem currentItem = bookingItemMap.computeIfAbsent(productCode, mapFunction);
         currentItem.addQuantity(quantity);
-        currentItem.recalculatePrice();
-        recalculatePrice();
+        currentItem.recalculateItemPrice();
+        recalculateBasketPrice();
     }
 
     /**
      * recalculate the price of the shopping basket
      */
-    private void recalculatePrice() {
+    private void recalculateBasketPrice() {
         totalPrice = bookingItemMap.values()
                 .stream()
                 .map(BookingItem::getPrice)
