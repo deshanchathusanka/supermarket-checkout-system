@@ -30,13 +30,15 @@ public class BookingItem {
      * recalculate price based on unit price and discount price schemes
      */
     public void recalculatePrice() {
+        int tempPrice = 0;
         int balanceQuantity = quantity;
         for (PriceScheme scheme : priceSchemes) {
             if (balanceQuantity >= scheme.getQuantity()) {
-                price += (balanceQuantity / scheme.getQuantity()) * scheme.getPrice();
+                tempPrice += (balanceQuantity / scheme.getQuantity()) * scheme.getPrice();
                 balanceQuantity = balanceQuantity % scheme.getQuantity();
             }
         }
+        price = tempPrice;
     }
 
     public Product getProduct() {

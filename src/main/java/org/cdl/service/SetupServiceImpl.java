@@ -3,17 +3,17 @@ package org.cdl.service;
 import org.cdl.object.PriceScheme;
 import org.cdl.object.Product;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SetupServiceImpl implements SetupService {
-    private final Map<String, List<PriceScheme>> schemeMap;
+    private static Map<String, List<PriceScheme>> schemeMap = new HashMap<>();
+
+    public SetupServiceImpl() {
+    }
 
     public SetupServiceImpl(Map<String, List<PriceScheme>> schemeMap) {
-        this.schemeMap = schemeMap;
+        SetupServiceImpl.schemeMap = schemeMap;
     }
 
     @Override

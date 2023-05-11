@@ -13,16 +13,23 @@ import java.util.UUID;
  * @since 1.0
  */
 public class CartServiceImpl implements CartService {
-    private final Map<String, ShoppingBasket> basketMap;
+    private static Map<String, ShoppingBasket> basketMap = new HashMap<>();
 
-    public CartServiceImpl(Map<String, ShoppingBasket> basketMap) {
-        this.basketMap = basketMap;
+    public CartServiceImpl() {
+    }
+
+    /**
+     * This constructor is used only for testing purposes
+     * @param basketMap
+     */
+    CartServiceImpl(Map<String, ShoppingBasket> basketMap) {
+        CartServiceImpl.basketMap = basketMap;
     }
 
     @Override
     public ShoppingBasket createShoppingBasket() {
         String sessionId = UUID.randomUUID().toString();
-        ShoppingBasket shoppingBasket = new ShoppingBasketImpl(sessionId, new HashMap<>(), new SetupServiceImpl(new HashMap<>()));
+        ShoppingBasket shoppingBasket = new ShoppingBasketImpl(sessionId, new HashMap<>(), new SetupServiceImpl());
         basketMap.put(sessionId, shoppingBasket);
         return shoppingBasket;
     }
