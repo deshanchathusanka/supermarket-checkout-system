@@ -52,7 +52,7 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         totalPrice = bookingItemMap.values()
                 .stream()
                 .map(BookingItem::getPrice)
-                .reduce(0.0, Double::sum);
+                .reduce(0.00, Double::sum);
     }
 
     @Override
