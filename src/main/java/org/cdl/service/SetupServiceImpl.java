@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class SetupServiceImpl implements SetupService {
     private final Map<String, List<PriceScheme>> schemeMap;
 
-    SetupServiceImpl(Map<String, List<PriceScheme>> schemeMap) {
+    public SetupServiceImpl(Map<String, List<PriceScheme>> schemeMap) {
         this.schemeMap = schemeMap;
     }
 
