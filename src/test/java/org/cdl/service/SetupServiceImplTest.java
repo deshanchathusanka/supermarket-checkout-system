@@ -1,7 +1,7 @@
 package org.cdl.service;
 
-import org.cdl.object.*;
-import org.cdl.service.*;
+import org.cdl.object.PriceScheme;
+import org.cdl.object.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
