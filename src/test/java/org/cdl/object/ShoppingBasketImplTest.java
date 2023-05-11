@@ -2,9 +2,12 @@ package org.cdl.object;
 
 import org.cdl.service.SetupService;
 import org.cdl.service.SetupServiceImpl;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -17,38 +20,66 @@ import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 class ShoppingBasketImplTest {
-    private ShoppingBasket shoppingBasket;
-    private SetupService setupService;
+    private static ShoppingBasket shoppingBasket;
+    private static SetupService setupService;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         String sessionId = UUID.randomUUID().toString();
         setupService = Mockito.spy(new SetupServiceImpl(new HashMap<>()));
         shoppingBasket = Mockito.spy(new ShoppingBasketImpl(sessionId, new HashMap<>(), setupService));
+        mockProductA();
+        mockProductB();
     }
 
-    @Test
-    void addItemTest() {
+    private static void mockProductA() {
         // mock
-        Product product = new Product(Product.Codes.B.getCode());
-        product.setUnitPrice(30);
-        PriceScheme priceScheme1 = new PriceScheme(product);
+        Product productA = new Product(Product.Codes.A.getCode());
+        productA.setUnitPrice(50);
+        // scheme 1 : single quantity price scheme
+        PriceScheme priceScheme1 = new PriceScheme(productA);
+        priceScheme1.setQuantity(1);
+        priceScheme1.setPrice(50);
+        // scheme 2 : multiple quantity price scheme
+        PriceScheme priceScheme2 = new PriceScheme(productA);
+        priceScheme2.setQuantity(3);
+        priceScheme2.setPrice(130);
+        doReturn(List.of(priceScheme2, priceScheme1))
+                .when(setupService)
+                .readSchemes(Product.Codes.A.getCode());
+    }
+
+    private static void mockProductB() {
+        // mock
+        Product productB = new Product(Product.Codes.B.getCode());
+        productB.setUnitPrice(30);
+        // scheme 1 : single quantity price scheme
+        PriceScheme priceScheme1 = new PriceScheme(productB);
         priceScheme1.setQuantity(1);
         priceScheme1.setPrice(30);
-        PriceScheme priceScheme2 = new PriceScheme(product);
+        // scheme 2 : multiple quantity price scheme
+        PriceScheme priceScheme2 = new PriceScheme(productB);
         priceScheme2.setQuantity(2);
         priceScheme2.setPrice(45);
         doReturn(List.of(priceScheme2, priceScheme1))
                 .when(setupService)
                 .readSchemes(Product.Codes.B.getCode());
+    }
 
+    @ParameterizedTest
+    @CsvSource(value = {"A:2:100:100",
+            "B:1:30:130",
+            "A:1:130:160",
+            "B:1:45:175"}, delimiter = ':')
+    void addItemTest(String productCode, int quantity, double totalItemPrice, double totalBasketPrice) {
         // method invocation
+        Product product = new Product(productCode);
         BookingItem bookingItem = new BookingItem(product);
-        bookingItem.addQuantity(3);
+        bookingItem.addQuantity(quantity);
         shoppingBasket.addItem(bookingItem);
 
         // assertions
-        assertThat(shoppingBasket.getTotalPrice()).isEqualTo(45 + 30);
-        assertThat(shoppingBasket.getItem(Product.Codes.B.getCode()).getPrice()).isEqualTo(45 + 30);
+        assertThat(shoppingBasket.getTotalPrice()).isEqualTo(totalBasketPrice);
+        assertThat(shoppingBasket.getItem(productCode).getPrice()).isEqualTo(totalItemPrice);
     }
 }

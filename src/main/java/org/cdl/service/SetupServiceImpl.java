@@ -7,11 +7,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class SetupServiceImpl implements SetupService {
+
+    // TODO : Need to implement cache to keep price schemes
     private static Map<String, List<PriceScheme>> schemeMap = new HashMap<>();
 
     public SetupServiceImpl() {
     }
 
+    /**
+     * This constructor is only used for testing purposes
+     * @param schemeMap
+     */
     public SetupServiceImpl(Map<String, List<PriceScheme>> schemeMap) {
         SetupServiceImpl.schemeMap = schemeMap;
     }
