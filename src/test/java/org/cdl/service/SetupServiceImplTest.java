@@ -78,4 +78,41 @@ public class SetupServiceImplTest {
         assertThat(priceSchemes.get(2).getPrice()).isEqualTo(50);
 
     }
+
+    @Test
+    void readSchemesTest() {
+        // method invocation
+        Product productA = new Product(Product.Codes.A.getCode());
+        productA.setUnitPrice(50);
+        Product productB = new Product(Product.Codes.A.getCode());
+        productA.setUnitPrice(30);
+        PriceScheme priceScheme1 = new PriceScheme(productA);
+        priceScheme1.setQuantity(1);
+        priceScheme1.setPrice(50);
+        PriceScheme priceScheme2 = new PriceScheme(productA);
+        priceScheme2.setQuantity(3);
+        priceScheme2.setPrice(130);
+        PriceScheme priceScheme3 = new PriceScheme(productB);
+        priceScheme3.setQuantity(2);
+        priceScheme3.setPrice(45);
+        setupService.addScheme(priceScheme1);
+        setupService.addScheme(priceScheme2);
+        setupService.addScheme(priceScheme3);
+        List<PriceScheme> priceSchemesA = setupService.readSchemes(Product.Codes.A.getCode());
+        List<PriceScheme> priceSchemesB = setupService.readSchemes(Product.Codes.B.getCode());
+
+        // assertions : product A
+        assertThat(priceSchemesA).hasSize(2);
+        assertThat(priceSchemesA.get(0).getQuantity()).isEqualTo(3);
+        assertThat(priceSchemesA.get(0).getPrice()).isEqualTo(130);
+        assertThat(priceSchemesA.get(1).getQuantity()).isEqualTo(1);
+        assertThat(priceSchemesA.get(1).getPrice()).isEqualTo(50);
+
+        // assertions : product B
+        assertThat(priceSchemesB).hasSize(1);
+        assertThat(priceSchemesB.get(0).getQuantity()).isEqualTo(2);
+        assertThat(priceSchemesB.get(0).getPrice()).isEqualTo(45);
+    }
+
+
 }
