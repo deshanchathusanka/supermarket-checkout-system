@@ -84,7 +84,7 @@ public class SetupServiceImplTest {
         // method invocation
         Product productA = new Product(Product.Codes.A.getCode());
         productA.setUnitPrice(50);
-        Product productB = new Product(Product.Codes.A.getCode());
+        Product productB = new Product(Product.Codes.B.getCode());
         productA.setUnitPrice(30);
         PriceScheme priceScheme1 = new PriceScheme(productA);
         priceScheme1.setQuantity(1);

@@ -29,4 +29,9 @@ public class SetupServiceImpl implements SetupService {
         schemeMap.put(product.getCode(), sortedSchemes);
 
     }
+
+    @Override
+    public List<PriceScheme> readSchemes(String productCode) {
+        return schemeMap.get(productCode);
+    }
 }
