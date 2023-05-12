@@ -9,17 +9,23 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * Implementation of Cart Service
+ *
  * @author deshan
  * @since 1.0
  */
 public class CartServiceImpl implements CartService {
+
+    // TODO : Need to implement cache to keep shopping basket as memento object
     private static Map<String, ShoppingBasket> basketMap = new HashMap<>();
 
     public CartServiceImpl() {
+        /* default constructor */
     }
 
     /**
      * This constructor is used only for testing purposes
+     *
      * @param basketMap
      */
     CartServiceImpl(Map<String, ShoppingBasket> basketMap) {
@@ -36,8 +42,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ShoppingBasket readShoppingBasket(String sessionId) {
-        ShoppingBasket shoppingBasket = basketMap.get(sessionId);
-        return shoppingBasket;
+        return basketMap.get(sessionId);
     }
 
     @Override

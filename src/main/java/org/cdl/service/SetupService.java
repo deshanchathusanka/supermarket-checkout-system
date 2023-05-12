@@ -5,6 +5,8 @@ import org.cdl.object.PriceScheme;
 import java.util.List;
 
 /**
+ * Setup Service Interface
+ *
  * @author deshan
  * @since 1.0
  */

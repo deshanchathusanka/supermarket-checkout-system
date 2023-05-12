@@ -1,6 +1,8 @@
 package org.cdl.object;
 
 /**
+ * Shopping Basket Interface
+ *
  * @author deshan
  * @since 1.0
  */

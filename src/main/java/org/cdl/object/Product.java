@@ -1,5 +1,13 @@
 package org.cdl.object;
 
+import java.util.Objects;
+
+/**
+ * Product Class
+ *
+ * @author deshan
+ * @since 1.0
+ */
 public class Product {
     private final String code;
     private double unitPrice;
@@ -20,16 +28,24 @@ public class Product {
         return code;
     }
 
-    public enum Codes {
-        A("A"), B("B"), C("C");
-        private final String code;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Double.compare(product.unitPrice, unitPrice) == 0 && Objects.equals(code, product.code);
+    }
 
-        Codes(String code) {
-            this.code = code;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, unitPrice);
+    }
 
-        public String getCode() {
-            return code;
-        }
+    @Override
+    public String toString() {
+        return "Product{" +
+                "code='" + code + '\'' +
+                ", unitPrice=" + unitPrice +
+                '}';
     }
 }

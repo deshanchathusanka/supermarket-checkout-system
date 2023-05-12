@@ -4,17 +4,19 @@ import org.cdl.service.SetupService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
+ * Implementation of Shopping Basket
+ *
  * @author deshan
  * @since 1.0
  */
 public class ShoppingBasketImpl implements ShoppingBasket {
-    private String sessionId;
+    private final String sessionId;
     private double totalPrice;
     private final Map<String, BookingItem> bookingItemMap;
-
     private final SetupService setupService;
 
     public ShoppingBasketImpl(String sessionId, Map<String, BookingItem> bookingItemMap, SetupService setupService) {
@@ -34,6 +36,7 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         String productCode = product.getCode();
         int quantity = bookingItem.getQuantity();
         List<PriceScheme> priceSchemes = setupService.readSchemes(productCode);
+
         Function<String, BookingItem> mapFunction = key -> {
             BookingItem item = new BookingItem(product);
             item.setPriceSchemes(priceSchemes);
@@ -41,18 +44,18 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         };
         BookingItem currentItem = bookingItemMap.computeIfAbsent(productCode, mapFunction);
         currentItem.addQuantity(quantity);
-        currentItem.recalculatePrice();
-        recalculatePrice();
+        currentItem.recalculateItemPrice();
+        recalculateBasketPrice();
     }
 
     /**
      * recalculate the price of the shopping basket
      */
-    private void recalculatePrice() {
+    private void recalculateBasketPrice() {
         totalPrice = bookingItemMap.values()
                 .stream()
                 .map(BookingItem::getPrice)
-                .reduce(0.0, Double::sum);
+                .reduce(0.00, Double::sum);
     }
 
     @Override
@@ -65,4 +68,26 @@ public class ShoppingBasketImpl implements ShoppingBasket {
         return totalPrice;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingBasketImpl that = (ShoppingBasketImpl) o;
+        return Double.compare(that.totalPrice, totalPrice) == 0 && Objects.equals(sessionId, that.sessionId) && Objects.equals(bookingItemMap, that.bookingItemMap) && Objects.equals(setupService, that.setupService);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sessionId, totalPrice, bookingItemMap, setupService);
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingBasketImpl{" +
+                "sessionId='" + sessionId + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", bookingItemMap=" + bookingItemMap +
+                ", setupService=" + setupService +
+                '}';
+    }
 }
