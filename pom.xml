@@ -4,7 +4,7 @@
 
   <groupId>org.cdl</groupId>
   <artifactId>supermarket-checkout-system</artifactId>
-  <version>2.2</version>
+  <version>2.3</version>
   <packaging>jar</packaging>
 
   <name>supermarket-checkout-system</name>
