@@ -119,12 +119,14 @@ public class Main {
             /* **************** (1) product code ******************** */
             logger.info("Enter the product code(A,B, C,...): ");
             String productCode = scanner.nextLine();
+            List<PriceScheme> priceSchemes = setupService.readSchemes(productCode);
             /* validate input */
-            while (!productCode.matches(PRODUCT_CODE_REGEX)) {
-                logger.info("Please ENTER a valid product code(Uppercase Letter): ");
+            while (priceSchemes.isEmpty()) {
+                logger.info("Please ENTER a valid product code: ");
                 productCode = scanner.nextLine();
+                priceSchemes = setupService.readSchemes(productCode);
             }
-            Product product = setupService.readSchemes(productCode).get(0).getProduct();
+            Product product = priceSchemes.get(0).getProduct();
             PriceScheme priceScheme = new PriceScheme(product);
 
             /* **************** (2) quantity ******************** */
@@ -159,17 +161,26 @@ public class Main {
     private static void checkout(CartService cartService, SetupService setupService, Scanner scanner) {
         logger.info("################ SCAN ITEMS #####################");
 
+        /* **************** (1) create shopping basket ******************** */
         ShoppingBasket shoppingBasket = cartService.createShoppingBasket();
 
-        /* **************** scan item ******************** */
+        /* **************** (2) scan item ******************** */
         logger.info("Enter the product code of the item(Enter END to complete the transaction): ");
         String itemCode = scanner.nextLine();
-        /* validate input */
-        while (!itemCode.matches(PRODUCT_CODE_REGEX)) {
-            logger.info("Please ENTER a valid product code(Uppercase Letter): ");
-            itemCode = scanner.nextLine();
-        }
+        List<PriceScheme> priceSchemes;
+
+        OUTER:
         while (!END.equals(itemCode)) {
+            priceSchemes = setupService.readSchemes(itemCode);
+            while (priceSchemes.isEmpty()) {
+                logger.info("Please ENTER a valid product code: ");
+                itemCode = scanner.nextLine();
+                if (END.equals(itemCode)) {
+                    break OUTER;
+                }
+                priceSchemes = setupService.readSchemes(itemCode);
+            }
+
             Product product = setupService.readSchemes(itemCode).get(0).getProduct();
             BookingItem bookingItem = new BookingItem(product);
             bookingItem.addQuantity(1);
@@ -179,14 +190,9 @@ public class Main {
             /* **************** scan item ******************** */
             logger.info("Enter the product code of the item(Enter END to complete the transaction): ");
             itemCode = scanner.nextLine();
-            /* validate input */
-            while (!itemCode.matches(PRODUCT_CODE_REGEX) && !END.equals(itemCode)) {
-                logger.info("Please ENTER a valid product code(Uppercase Letter): ");
-                itemCode = scanner.nextLine();
-            }
         }
 
-        /* ##################### payment ######################## */
+        /* ##################### (3) payment ######################## */
         logger.info("################ PAYMENT #####################");
         logger.info(String.format("The Total Amount To Pay: %s", shoppingBasket.getTotalPrice()));
         logger.info("############# THANK YOU ################\n\n");

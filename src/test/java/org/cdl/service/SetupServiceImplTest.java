@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 import java.util.HashMap;
@@ -110,6 +111,12 @@ public class SetupServiceImplTest {
         assertThat(priceSchemesB).hasSize(1);
         assertThat(priceSchemesB.get(0).getQuantity()).isEqualTo(2);
         assertThat(priceSchemesB.get(0).getPrice()).isEqualTo(45);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"C", "D"})
+    void readSchemesTest_unavailable(String productCode) {
+        assertThat(setupService.readSchemes(productCode)).isEmpty();
     }
 
 
