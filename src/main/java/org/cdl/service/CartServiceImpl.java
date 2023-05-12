@@ -20,6 +20,7 @@ public class CartServiceImpl implements CartService {
     private static Map<String, ShoppingBasket> basketMap = new HashMap<>();
 
     public CartServiceImpl() {
+        /* default constructor */
     }
 
     /**

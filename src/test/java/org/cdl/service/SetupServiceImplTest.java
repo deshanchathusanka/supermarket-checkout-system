@@ -2,13 +2,12 @@ package org.cdl.service;
 
 import org.cdl.object.PriceScheme;
 import org.cdl.object.Product;
+import org.cdl.util.Codes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 public class SetupServiceImplTest {
 
     private SetupService setupService;
@@ -33,7 +31,7 @@ public class SetupServiceImplTest {
     @CsvSource(value = {"1:50", "3:130"}, delimiter = ':')
     void addSchemeTest_single(int quantity, int price) {
         // method invocation
-        Product product = new Product(Product.Codes.A.getCode());
+        Product product = new Product(Codes.A.getCode());
         product.setUnitPrice(50);
         PriceScheme priceScheme = new PriceScheme(product);
         priceScheme.setQuantity(quantity);
@@ -41,18 +39,18 @@ public class SetupServiceImplTest {
         setupService.addScheme(priceScheme);
 
         // assertions
-        List<PriceScheme> priceSchemes = schemeMap.get(Product.Codes.A.getCode());
+        List<PriceScheme> priceSchemes = schemeMap.get(Codes.A.getCode());
         assertThat(priceSchemes).hasSize(1);
         assertThat(priceSchemes.get(0).getQuantity()).isEqualTo(quantity);
         assertThat(priceSchemes.get(0).getPrice()).isEqualTo(price);
         assertThat(priceSchemes.get(0).getProduct().getUnitPrice()).isEqualTo(50);
-        assertThat(priceSchemes.get(0).getProduct().getCode()).isEqualTo(Product.Codes.A.getCode());
+        assertThat(priceSchemes.get(0).getProduct().getCode()).isEqualTo(Codes.A.getCode());
     }
 
     @Test
     void addSchemeTest_multiple_sort() {
         // method invocation
-        Product product = new Product(Product.Codes.A.getCode());
+        Product product = new Product(Codes.A.getCode());
         product.setUnitPrice(50);
         PriceScheme priceScheme1 = new PriceScheme(product);
         priceScheme1.setQuantity(1);
@@ -68,7 +66,7 @@ public class SetupServiceImplTest {
         setupService.addScheme(priceScheme3);
 
         // assertions : schemes should be sorted in descending  order based on quantity
-        List<PriceScheme> priceSchemes = schemeMap.get(Product.Codes.A.getCode());
+        List<PriceScheme> priceSchemes = schemeMap.get(Codes.A.getCode());
         assertThat(priceSchemes).hasSize(3);
         assertThat(priceSchemes.get(0).getQuantity()).isEqualTo(5);
         assertThat(priceSchemes.get(0).getPrice()).isEqualTo(200);
@@ -82,9 +80,9 @@ public class SetupServiceImplTest {
     @Test
     void readSchemesTest() {
         // method invocation
-        Product productA = new Product(Product.Codes.A.getCode());
+        Product productA = new Product(Codes.A.getCode());
         productA.setUnitPrice(50);
-        Product productB = new Product(Product.Codes.B.getCode());
+        Product productB = new Product(Codes.B.getCode());
         productA.setUnitPrice(30);
         PriceScheme priceScheme1 = new PriceScheme(productA);
         priceScheme1.setQuantity(1);
@@ -98,8 +96,8 @@ public class SetupServiceImplTest {
         setupService.addScheme(priceScheme1);
         setupService.addScheme(priceScheme2);
         setupService.addScheme(priceScheme3);
-        List<PriceScheme> priceSchemesA = setupService.readSchemes(Product.Codes.A.getCode());
-        List<PriceScheme> priceSchemesB = setupService.readSchemes(Product.Codes.B.getCode());
+        List<PriceScheme> priceSchemesA = setupService.readSchemes(Codes.A.getCode());
+        List<PriceScheme> priceSchemesB = setupService.readSchemes(Codes.B.getCode());
 
         // assertions : product A
         assertThat(priceSchemesA).hasSize(2);

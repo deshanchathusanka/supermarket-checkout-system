@@ -18,6 +18,7 @@ public class SetupServiceImpl implements SetupService {
     private static Map<String, List<PriceScheme>> schemeMap = new HashMap<>();
 
     public SetupServiceImpl() {
+        /* default constructor */
     }
 
     /**

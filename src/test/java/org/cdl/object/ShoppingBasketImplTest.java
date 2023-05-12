@@ -2,14 +2,11 @@ package org.cdl.object;
 
 import org.cdl.service.SetupService;
 import org.cdl.service.SetupServiceImpl;
+import org.cdl.util.Codes;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +15,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
-@ExtendWith(MockitoExtension.class)
 class ShoppingBasketImplTest {
     private static ShoppingBasket shoppingBasket;
     private static SetupService setupService;
@@ -34,7 +30,7 @@ class ShoppingBasketImplTest {
 
     private static void mockProductA() {
         // mock
-        Product productA = new Product(Product.Codes.A.getCode());
+        Product productA = new Product(Codes.A.getCode());
         productA.setUnitPrice(50);
         // scheme 1 : single quantity price scheme
         PriceScheme priceScheme1 = new PriceScheme(productA);
@@ -50,12 +46,12 @@ class ShoppingBasketImplTest {
         priceScheme3.setPrice(400);
         doReturn(List.of(priceScheme3, priceScheme2, priceScheme1))
                 .when(setupService)
-                .readSchemes(Product.Codes.A.getCode());
+                .readSchemes(Codes.A.getCode());
     }
 
     private static void mockProductB() {
         // mock
-        Product productB = new Product(Product.Codes.B.getCode());
+        Product productB = new Product(Codes.B.getCode());
         productB.setUnitPrice(30);
         // scheme 1 : single quantity price scheme
         PriceScheme priceScheme1 = new PriceScheme(productB);
@@ -67,7 +63,7 @@ class ShoppingBasketImplTest {
         priceScheme2.setPrice(45);
         doReturn(List.of(priceScheme2, priceScheme1))
                 .when(setupService)
-                .readSchemes(Product.Codes.B.getCode());
+                .readSchemes(Codes.B.getCode());
     }
 
     @ParameterizedTest

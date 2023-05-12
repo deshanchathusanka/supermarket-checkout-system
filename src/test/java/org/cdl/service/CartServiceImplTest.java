@@ -4,11 +4,10 @@ import org.cdl.object.BookingItem;
 import org.cdl.object.Product;
 import org.cdl.object.ShoppingBasket;
 import org.cdl.object.ShoppingBasketImpl;
+import org.cdl.util.Codes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 
-@ExtendWith(MockitoExtension.class)
 public class CartServiceImplTest {
     private CartService cartService;
     private SetupService setupService;
@@ -53,7 +51,7 @@ public class CartServiceImplTest {
     @Test
     void addItemTest() {
         // method invocation
-        Product product = new Product(Product.Codes.A.getCode());
+        Product product = new Product(Codes.A.getCode());
         BookingItem bookingItem = new BookingItem(product);
         bookingItem.addQuantity(2);
 

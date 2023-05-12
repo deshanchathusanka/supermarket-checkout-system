@@ -34,7 +34,7 @@ public class Main {
             logger.info("################ WELCOME ##################");
             logger.info("Press ENTER to start(q to quit): ");
             String start = scanner.nextLine();
-            if ("q".equals(start)) {
+            if (QUIT.equals(start)) {
                 break;
             }
             /* ################### (1) setup new Item ################## */
@@ -114,7 +114,7 @@ public class Main {
             isSetupScheme = scanner.nextLine();
         }
 
-        while ("Y".equals(isSetupScheme)) {
+        while (YES.equals(isSetupScheme)) {
 
             /* **************** (1) product code ******************** */
             logger.info("Enter the product code(A,B, C,...): ");
@@ -198,7 +198,7 @@ public class Main {
      * @param priceStr String price
      * @return double price
      */
-    private static double preprocessPrice(String priceStr) {
+    static double preprocessPrice(String priceStr) {
         double price;
         /* validate input */
         if (priceStr.startsWith(POUND)) {
