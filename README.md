@@ -32,6 +32,8 @@ Technical details
 - This project is written in JDK 17.
 - This project used SLF4J abstraction with LOG4J2 implementation for logging purpose.  By default, two logger appenders 
 are setup in the configuration file, one for console and other for file.
+- The UML diagram is designed from Visual Paradigm software and the source file(.vpd) is attached to the images folder 
+for further improvements.
 
 Instruction for execution
 -
