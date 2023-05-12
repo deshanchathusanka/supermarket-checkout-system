@@ -2,6 +2,8 @@ package org.cdl.service;
 
 import org.cdl.object.PriceScheme;
 import org.cdl.object.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ public class SetupServiceImpl implements SetupService {
 
     // TODO : Need to implement cache to keep price schemes
     private static Map<String, List<PriceScheme>> schemeMap = new HashMap<>();
+    private static Logger logger = LoggerFactory.getLogger(SetupServiceImpl.class);
 
     public SetupServiceImpl() {
         /* default constructor */
@@ -46,6 +49,12 @@ public class SetupServiceImpl implements SetupService {
 
     @Override
     public List<PriceScheme> readSchemes(String productCode) {
-        return schemeMap.get(productCode);
+        Optional<List<PriceScheme>> priceSchemeOpt = Optional.ofNullable(schemeMap.get(productCode));
+        if (priceSchemeOpt.isEmpty()) {
+            logger.info(String.format("No scheme has been setup for the product : %s", productCode));
+            return Collections.emptyList();
+        } else {
+            return priceSchemeOpt.get();
+        }
     }
 }

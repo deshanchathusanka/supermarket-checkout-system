@@ -159,9 +159,10 @@ public class Main {
     private static void checkout(CartService cartService, SetupService setupService, Scanner scanner) {
         logger.info("################ SCAN ITEMS #####################");
 
+        /* **************** (1) create shopping basket ******************** */
         ShoppingBasket shoppingBasket = cartService.createShoppingBasket();
 
-        /* **************** scan item ******************** */
+        /* **************** (2) scan item ******************** */
         logger.info("Enter the product code of the item(Enter END to complete the transaction): ");
         String itemCode = scanner.nextLine();
         /* validate input */
@@ -186,7 +187,7 @@ public class Main {
             }
         }
 
-        /* ##################### payment ######################## */
+        /* ##################### (3) payment ######################## */
         logger.info("################ PAYMENT #####################");
         logger.info(String.format("The Total Amount To Pay: %s", shoppingBasket.getTotalPrice()));
         logger.info("############# THANK YOU ################\n\n");
